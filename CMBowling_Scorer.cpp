@@ -86,6 +86,8 @@ int main()
 		}
 	}
 
+
+	int nArraySize = 
 	// Output Bowling Scores
 	std::cout << "\nBowling Scores:\n";
 	for (int player = 0; player < nPlayerNum; player++) {
