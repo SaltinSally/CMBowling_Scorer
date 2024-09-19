@@ -97,41 +97,52 @@ int main()
 
 	// Calculate Total Score
 
-	std::vector<int> playertotals(nPlayerNum);
+	std::vector<int> playertotals(nPlayerNum, 0);
 	int nBowlsPerPlayer = nNumBowls / nPlayerNum;
-	int nNextTurn = (nPlayerNum * nBowls_Per_Frame);
+	int nNextTurn = nBowls_Per_Frame;
 	//int nArraySize = 5;
 	// Output Bowling Scores
 	for (int player = 0; player < nPlayerNum; player++) {
 		for (int frame = 0; frame < nFrames; frame++) {
-			for (int bowl = 0; bowl < nBowls_Per_Frame; bowl++) {
-				int index = getIndex(player, frame, bowl);
-				if (bowl == 0 && frame == 9 && scores[index] == 10) {
-					playertotals[player] += (scores[index] + scores[index + 1] + scores[index + 2]);
+			int index = getIndex(player, frame, 0); // Start of the frame
+
+			if (frame == 9) { // Last frame
+				if (scores[index] == 10) { // Strike
+					playertotals[player] += 10 + scores[index + 1] + scores[index + 2];
 				}
-				else if (bowl == 1 && frame == 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10) {
-					playertotals[player] += (scores[index-1] + scores[index] + scores[index + 1]);
+				else if (scores[index] + scores[index + 1] == 10) { // Spare
+					playertotals[player] += 10 + scores[index + 2];
 				}
-				else if (frame == 9 && bowl == 0) {
-					playertotals[player] += scores[index] + scores[index + 1] + scores[index + 2];
-				}
-				else if (bowl == 0 && scores[index] == 10 && frame != 9) {
-					playertotals[player] += scores[index + 1] + (scores[index + nNextTurn]);
-				}
-				else if (bowl == 1 && frame != 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10) {
-					playertotals[player] += scores[index] + scores[index + nNextTurn - 1];
-				}
-				else if (bowl == 0 && frame != 9 && scores[index] != 10 && (scores[index] + scores[index +1]) != 10) {
+				else {
 					playertotals[player] += scores[index] + scores[index + 1];
 				}
-
-
 			}
-			std::cout << std::endl;
+			else {
+				if (scores[index] == 10) { // Strike
+					int nextIndex1 = index + nNextTurn;
+					int nextIndex2 = index + nNextTurn + 1;
+					if (nextIndex1 < nTotalElements && nextIndex2 < nTotalElements) {
+						playertotals[player] += 10 + scores[nextIndex1] + scores[nextIndex2];
+					}
+					else {
+						playertotals[player] += 10;
+					}
+				}
+				else if (scores[index] + scores[index + 1] == 10) { // Spare
+					int nextIndex = index + nNextTurn;
+					if (nextIndex < nTotalElements) {
+						playertotals[player] += 10 + scores[nextIndex];
+					}
+					else {
+						playertotals[player] += 10;
+					}
+				}
+				else {
+					playertotals[player] += scores[index] + scores[index + 1];
+				}
+			}
 		}
 	}
-
-
 
 
 	std::cout << "\nBowling Scores:\n";
@@ -140,7 +151,7 @@ int main()
 			std::cout << "Player " << names[player] << ", Frame " << frame + 1 << ": ";
 			for (int bowl = 0; bowl < nBowls_Per_Frame; bowl++) {
 				int index = getIndex(player, frame, bowl);
-				if (bowl == 3 && frame != 9);
+				if (bowl == 3 && frame != 9)
 				std::cout << scores[index] << " ";
 				
 			}
@@ -150,6 +161,7 @@ int main()
 	std::cout << std::endl;
 	for (int player = 0; player < nPlayerNum; player++) {
 		std::cout << "player " << names[player] << " scored: " << playertotals[player];
+		std::cout << std::endl;
 	}
 
 	// Deallocate the memory for 1D array

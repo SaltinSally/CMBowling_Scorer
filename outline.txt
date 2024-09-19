@@ -33,3 +33,28 @@ Items needed:
 	1. For loop which loops through the vector of names
 	2. Nested for loop which loops through the number of bowls for each player (2 at a time)
 	3. Array for storing the number of pins knocked over for each player. (2D array?)
+
+				if (bowl == 0 && frame == 9 && scores[index] == 10 && index + 2 < nTotalElements) {
+					playertotals[player] += (10 + scores[index + 1] + scores[index + 2]);
+				}
+				else if (bowl == 1 && frame == 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10 && index + 2 < nTotalElements) {
+					playertotals[player] += (10 + scores[index + 1]);
+				}
+				else if (frame == 9 && bowl == 0 && index + 2 < nTotalElements) {
+					playertotals[player] += scores[index] + scores[index + 1] + scores[index + 2];
+				}
+				else if (bowl == 0 && scores[index] == 10 && frame != 9) {
+					playertotals[player] += 10 + scores[index + 1] + (scores[index + nNextTurn] && index + 1 < nTotalElements);
+				}
+				else if (bowl == 1 && frame != 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10) {
+					playertotals[player] += 10 + scores[index + nNextTurn - 1];
+				}
+				else if (bowl == 0 && frame != 9 && scores[index] != 10 && (scores[index] + scores[index +1]) != 10 && index + 1 < nTotalElements) {
+					playertotals[player] += scores[index] + scores[index + 1];
+				}
+
+
+			}
+			std::cout << std::endl;
+		}
+	}
