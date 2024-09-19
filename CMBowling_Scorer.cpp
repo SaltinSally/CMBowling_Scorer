@@ -148,7 +148,7 @@ int main()
 		}
 	}
 	std::cout << std::endl;
-	for (int player = 0; player <= nPlayerNum; player++) {
+	for (int player = 0; player < nPlayerNum; player++) {
 		std::cout << "player " << names[player] << " scored: " << playertotals[player];
 	}
 
