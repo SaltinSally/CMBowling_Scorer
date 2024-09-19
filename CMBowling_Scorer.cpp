@@ -20,6 +20,7 @@ int main()
 	int nPlayerNum = 0;
 	int nFrames = 10;
 	int nBowls_Per_Frame = 3;
+	int nNumBowls = 0;
 
 	std::vector <std::string> names;
 
@@ -57,7 +58,7 @@ int main()
 	int nTotalElements = (nPlayerNum * nFrames * nBowls_Per_Frame);
 	
 	// Create a 1D Array
-	int* scores = new int[nTotalElements];		// And Dynamically Allocate Memory
+	int* scores = new int[nTotalElements];		// Dynamically Allocate Memory
 
 	// Function used to get the index of 1D Array
 	auto getIndex = [nFrames, nBowls_Per_Frame](int player, int frame, int bowl) {
@@ -65,25 +66,12 @@ int main()
 		};
 
 
-	/*
-		  _______ ____    _____   ____    
-		 |__   __/ __ \  |  __ \ / __ \ _ 
-			| | | |  | | | |  | | |  | (_)
-			| | | |  | | | |  | | |  | |  
-			| | | |__| | | |__| | |__| |_ 
-			|_|  \____/  |_____/ \____/(_)
-                                  
-         Fix logic. Right now it scores an entire game for one player, then an entire game for the next.
-		 This should be adjusted so every game runs concurrently, as it would in a real bowling game.
-
-	*/
-
-
 	// Loop over player names and capture number of pins knocked over after each bowl
-	for (int player = 0; player < nPlayerNum; player++) {
-		for (int frame = 0; frame < nFrames; frame++) {
+	for (int frame = 0; frame < nFrames; frame++) {
+		for (int player = 0; player < nPlayerNum; player++) {
 			for (int bowl = 0; bowl < nBowls_Per_Frame; bowl++) {
 				int index = getIndex(player, frame, bowl); // Calculate the index
+				nNumBowls += 1;
 				if (bowl == 2 && !(frame == 9)) {
 					scores[index] = 0;
 				}
@@ -100,26 +88,68 @@ int main()
 						<< "\nFrame " << frame + 1
 						<< "\nBowl " << bowl + 1 << ": ";
 					std::cin >> scores[index]; // Store the score into the 1D array
-					system("cls");
+					CLEAR();
 				}
 
 			}
 		}
 	}
 
+	// Calculate Total Score
 
-	int nArraySize = 
+	std::vector<int> playertotals(nPlayerNum);
+	int nBowlsPerPlayer = nNumBowls / nPlayerNum;
+	int nNextTurn = (nPlayerNum * nBowls_Per_Frame);
+	//int nArraySize = 5;
 	// Output Bowling Scores
+	for (int player = 0; player < nPlayerNum; player++) {
+		for (int frame = 0; frame < nFrames; frame++) {
+			for (int bowl = 0; bowl < nBowls_Per_Frame; bowl++) {
+				int index = getIndex(player, frame, bowl);
+				if (bowl == 0 && frame == 9 && scores[index] == 10) {
+					playertotals[player] += (scores[index] + scores[index + 1] + scores[index + 2]);
+				}
+				else if (bowl == 1 && frame == 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10) {
+					playertotals[player] += (scores[index-1] + scores[index] + scores[index + 1]);
+				}
+				else if (frame == 9 && bowl == 0) {
+					playertotals[player] += scores[index] + scores[index + 1] + scores[index + 2];
+				}
+				else if (bowl == 0 && scores[index] == 10 && frame != 9) {
+					playertotals[player] += scores[index + 1] + (scores[index + nNextTurn]);
+				}
+				else if (bowl == 1 && frame != 9 && scores[index - 1] != 10 && (scores[index - 1] + scores[index]) == 10) {
+					playertotals[player] += scores[index] + scores[index + nNextTurn - 1];
+				}
+				else if (bowl == 0 && frame != 9 && scores[index] != 10 && (scores[index] + scores[index +1]) != 10) {
+					playertotals[player] += scores[index] + scores[index + 1];
+				}
+
+
+			}
+			std::cout << std::endl;
+		}
+	}
+
+
+
+
 	std::cout << "\nBowling Scores:\n";
 	for (int player = 0; player < nPlayerNum; player++) {
 		for (int frame = 0; frame < nFrames; frame++) {
 			std::cout << "Player " << names[player] << ", Frame " << frame + 1 << ": ";
 			for (int bowl = 0; bowl < nBowls_Per_Frame; bowl++) {
 				int index = getIndex(player, frame, bowl);
+				if (bowl == 3 && frame != 9);
 				std::cout << scores[index] << " ";
+				
 			}
 			std::cout << std::endl;
 		}
+	}
+	std::cout << std::endl;
+	for (int player = 0; player <= nPlayerNum; player++) {
+		std::cout << "player " << names[player] << " scored: " << playertotals[player];
 	}
 
 	// Deallocate the memory for 1D array

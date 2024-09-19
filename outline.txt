@@ -1,0 +1,35 @@
+This file contains the outline for the bowling scorer project. This project contains a program called
+CMBowling_Scorer which takes input from the user(s) playing a single game of bowling. The program
+is designed to work similarly to a score guide you may find on a tv screen at a bowling alley. 
+
+Typically a bowling alley has some sort of controller with a keypad for entering in user data
+which will then display on the screen. Unlike a bowling alley scorer, the user must enter 
+the results from each bowl (for obvious reasons).
+
+Outline:
+
+[1] Capturing player names
+
+Capture user each players name and store this information in a vector titled names.
+The code block for capturing the names of players should also compute the number of 
+players based off the number of entries that do not equal "done". The user will enter
+"done" when they have finished entering in player names.
+
+Items needed:
+	1. While loop for capturing player names
+	2. Vector for storing player names
+
+[2] Capturing each bowling scores
+
+Capture the number of pins knocked over after each bowl for each of the players.
+This can be done one player at a time, but to remain as similar to a traditional 
+bowling scorer as possible, this should be done by looping through each player and
+capturing the number of pins knocked over for two bowls then looping to the next player.
+
+*Note: This section should allow for a third bowl on frame 10 to be possible for the 
+program to work correctly
+
+Items needed:
+	1. For loop which loops through the vector of names
+	2. Nested for loop which loops through the number of bowls for each player (2 at a time)
+	3. Array for storing the number of pins knocked over for each player. (2D array?)
